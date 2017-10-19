@@ -1,0 +1,182 @@
+0.3.1
+    o more extensive package description
+0.3.0
+    o roxygen2 documentation, check imports for submission to CRAN
+0.2-2
+    o fix startup message
+    o better data compression
+0.2-1
+    o fix storing of results in classify_bioc_2.3
+0.2-0
+    o fix nlcv issue with limma feature selection
+0.1-99
+    o small documentation and namespace fixes
+0.1-98
+    o fix ordering by geneID in nlcv with limma feature selection
+0.1-97
+    o small fixes related to removal of nlcv as a4 dependency, a.o. introduction
+      of dependency on a4Core
+0.1-96
+    o add y axis label to scores plot and improve main title
+0.1-95
+    o further fix of layout in mcrPlot
+0.1-94
+    o fix layout in mcrPlot
+0.1-93
+    o fix layout in scoresPlot
+0.1-92
+    o add randomForest explicitly to dependencies
+    o fix bug in nlcv with limma feature selection, where incidentally 
+      the geneID column could be a factor and therefore cause erroneous
+      extraction from an ExpressionSet
+0.1-91
+    o rename topFeatures into topTable and turn the topFeatures function
+      into a method (for 'nlcv' objects)
+    o make use of sample names as x-axis labels of scoresPlot
+0.1-90
+	o document nldaI
+0.1-89
+	o confusionMatrix name space fix
+0.1-88
+    o replace MLearn interface for randomForest feature selection by
+      plain use of the randomForest function 
+0.1-87
+    o add geneID argument to nlcv to allow for different gene ID names
+      in the fData of the expression set
+0.1-86
+    o small fix for topTable in limma2Groups (which is introduced as alias for limmaTwoGroups)
+0.1-85
+    o turned confusionMatrix into a generic function
+0.1-84
+    o added sampling strategy for unbalanced class distributions; argument 'distclass' of
+      functions inTrainingSample and nlcv 
+0.1-83
+	o fix too protective check in nlcv (randomForest feature selection)
+0.1-82
+	o fix to prevent pamr to mess up error handling
+0.1-81
+    o add fsMethod = "none"
+    o add AUC for models with continuous outputs (nlda, glm)
+    o store ROC curves (ROCR package)
+    o add nldaI interface allowing to store testScores (for lda models)
+    o add customization of ntree and mtry for feature selection using
+      randomForest
+    o check that mtry <= maximum of nFeatures 
+0.1-80
+	o regenerate example data sets
+	o add check on tech in scoresPlot
+0.1-79
+    o small tweak to scoresPlot
+    o add qda (quadratic discriminant analysis) and glm (logistic regression)
+      interfaces
+0.1-78
+    o add rescale argument to mcrPlot function
+    o add plain lda and ksvm classifiers
+0.1-77
+    o quick extension of pamrML and predict.pamrML for ExpressionSet objects
+    o added method argument to topFeatures; can be one of "percentage",
+      "meanrank" or "medianrank"
+	o fix limma feature selection (use training set, not full set)
+	o added inst/generateData.R, a script used to generate the data 
+	  in data/
+0.1-76
+	o integrate pamr as an MLearn interface
+0.1-75
+    o remove featureSelectionRF wrapper and move code into nlcv function
+    o fix randomForest feature selection code
+0.1-74
+	o add check on feature selection methods
+	o add check on fact that it should be a two-class problem
+	o new argument classifMethods to select the appropriate
+	  classification methods
+	o updates related to BioC 2.3 release (testPredictions 
+	  instead of predLabels)
+0.1-73
+	o nlcv again separate package (after temporary merge with a4)
+0.1-72
+	o added feature selection by limma (implying an additional dependency on a4)
+	o improved passing of further parameters to the feature selection method
+	  (argument fsPar)
+0.1-71
+	o integration of final package vignette
+	o xtable method for summary.mcrPlot objects added
+0.1-70
+	o another rewrite of simulateData
+	o artificial datasets changed accordingly
+0.1-69
+	o artificial datasets updated (using updated nlcv)
+	o fixed buglet in simulateData
+0.1-68
+	o fixed bug in nlcv (testPredictions returned factor, whereas 
+	  predLabels returned a character vector)
+	o small fix in simulateData
+	o added run-time tests directory
+0.1-67
+	o added simulated datasets: nlcvRF, nlcvTT_SS, 
+	  nlcvRF_WS, nlcvTT_WS, nlcvRF_WHS, nlcvTT_WHS, 
+	  nlcvRF_R and nlcvTT_R	
+	o scoresPlot: added layout argument (in order
+	  to allow multiple plots on one panel)
+	o rankDistributionPlot added 
+0.1-66
+	o scoresPlot: put information on classification technique and
+	  number of features into main (instead of sub) in order to avoid
+	  overlap with the sample names (x axis labels)
+	o topFeatures: the percentages now represent presence in the top n,
+	  instead of presence in the top 2*n
+0.1-65
+	o fixed simulateData (for nNoEffectCols == 0)
+	o added layout argument to mcrPlot function (in order
+	  to allow multiple plots on one panel)
+0.1-64
+	o added xtable method for confusionMatrix objects
+	o added explicit dependencies to sma, ipred, pamr and xtable
+0.1-63
+	o featureSelectionRF added to name space
+	o fixed naming issue in nlcv (featureSelectionRF instead of 
+	  variableSelectionRF)
+0.1-62
+	o license information formatted according to rules: GPL (>=2)
+	o recursiveRandomForestFS removed and replaced by featureSelectionRF;
+	    the nFeaturesFinal argument of the former function has been dropped
+	    accordingly in the latter function
+	o simulateData gained additional arguments betweenClassDifference 
+	    and withinClassSd
+0.1-61
+	added function simulateData 
+0.1-60
+	added print method for confusionMatrix objects
+0.1-59
+	confusionMatrix function added
+0.1-58
+	mcrPlot and scoresPlot gain an argument plot (defaults to TRUE)
+	to allow use of the functions for computational purposes
+0.1-57
+	export topFeatures in NAMESPACE
+0.1-56
+	o scoresPlot: added supplementary legend for plot characters used
+	o scoresPlot: added explicit main and sub arguments
+0.1-55
+	scoresPlot: draw grid first, then add dots
+0.1-54
+	scoresPlot: vectorize drawing of class membership strip
+0.1-53
+	scoresPlot: fix drawing of class membership strip
+0.1-52
+	added dependency on RColorBrewer for class membership display
+	on scoresPlot
+0.1-51
+	added topFeatures function and help page
+0.1-50
+	put legend for scoresPlot in comment
+0.1-49 
+	make use of testPredictions instead of predLabels
+	(new version of MLInterfaces)
+0.1-47
+	remove remnant "type"s and replace with the appropriate
+	variable passed as arguments to the functions (classVar argument)
+0.1-46
+	replace randomForestB by MLearn and the appropriate method
+0.1-45
+	removed warnings from generateData (by making a
+	real ExpressionSet)

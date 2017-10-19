@@ -1,0 +1,245 @@
+% This file was created with JabRef 2.3.1.
+% Encoding: Cp1252
+
+@ARTICLE{Ambroise2002,
+  author = {Christophe Ambroise and Geoffrey J McLachlan},
+  title = {Selection bias in gene extraction on the basis of microarray gene-expression
+	data.},
+  journal = {Proc Natl Acad Sci U S A},
+  year = {2002},
+  volume = {99},
+  pages = {6562--6566},
+  number = {10},
+  month = {May},
+  abstract = {In the context of cancer diagnosis and treatment, we consider the
+	problem of constructing an accurate prediction rule on the basis
+	of a relatively small number of tumor tissue samples of known type
+	containing the expression data on very many (possibly thousands)
+	genes. Recently, results have been presented in the literature suggesting
+	that it is possible to construct a prediction rule from only a few
+	genes such that it has a negligible prediction error rate. However,
+	in these results the test error or the leave-one-out cross-validated
+	error is calculated without allowance for the selection bias. There
+	is no allowance because the rule is either tested on tissue samples
+	that were used in the first instance to select the genes being used
+	in the rule or because the cross-validation of the rule is not external
+	to the selection process; that is, gene selection is not performed
+	in training the rule at each stage of the cross-validation process.
+	We describe how in practice the selection bias can be assessed and
+	corrected for by either performing a cross-validation or applying
+	the bootstrap external to the selection process. We recommend using
+	10-fold rather than leave-one-out cross-validation, and concerning
+	the bootstrap, we suggest using the so-called .632+ bootstrap error
+	estimate designed to handle overfitted prediction rules. Using two
+	published data sets, we demonstrate that when correction is made
+	for the selection bias, the cross-validated error is no longer zero
+	for a subset of only a few genes.},
+  doi = {10.1073/pnas.102102699},
+  institution = {Laboratoire Heudiasyc, Unité Mixte de Recherche/Centre National de
+	la Recherche Scientifique 6599, 60200 Compiègne, France.},
+  keywords = {Discriminant Analysis; Gene Expression; Linear Models; Oligonucleotide
+	Array Sequence Analysis; Selection Bias},
+  owner = {wtalloen},
+  pii = {102102699},
+  pmid = {11983868},
+  timestamp = {2008.05.21},
+  url = {http://dx.doi.org/10.1073/pnas.102102699}
+}
+
+@ARTICLE{Diaz-Uriarte2006,
+  author = {Ramón Díaz-Uriarte and Sara Alvarez de Andrés},
+  title = {Gene selection and classification of microarray data using random
+	forest.},
+  journal = {BMC Bioinformatics},
+  year = {2006},
+  volume = {7},
+  pages = {3},
+  abstract = {BACKGROUND: Selection of relevant genes for sample classification
+	is a common task in most gene expression studies, where researchers
+	try to identify the smallest possible set of genes that can still
+	achieve good predictive performance (for instance, for future use
+	with diagnostic purposes in clinical practice). Many gene selection
+	approaches use univariate (gene-by-gene) rankings of gene relevance
+	and arbitrary thresholds to select the number of genes, can only
+	be applied to two-class problems, and use gene selection ranking
+	criteria unrelated to the classification algorithm. In contrast,
+	random forest is a classification algorithm well suited for microarray
+	data: it shows excellent performance even when most predictive variables
+	are noise, can be used when the number of variables is much larger
+	than the number of observations and in problems involving more than
+	two classes, and returns measures of variable importance. Thus, it
+	is important to understand the performance of random forest with
+	microarray data and its possible use for gene selection. RESULTS:
+	We investigate the use of random forest for classification of microarray
+	data (including multi-class problems) and propose a new method of
+	gene selection in classification problems based on random forest.
+	Using simulated and nine microarray data sets we show that random
+	forest has comparable performance to other classification methods,
+	including DLDA, KNN, and SVM, and that the new gene selection procedure
+	yields very small sets of genes (often smaller than alternative methods)
+	while preserving predictive accuracy. CONCLUSION: Because of its
+	performance and features, random forest and gene selection using
+	random forest should probably become part of the "standard tool-box"
+	of methods for class prediction and gene selection with microarray
+	data.},
+  doi = {10.1186/1471-2105-7-3},
+  institution = {Bioinformatics Unit, Biotechnology Programme, Spanish National Cancer
+	Centre (CNIO), Melchor Fernandez Almagro 3, Madrid, 28029, Spain.
+	rdiaz@ligarto.org},
+  keywords = {Algorithms; Cluster Analysis; Computer Simulation; Gene Expression
+	Profiling; Models, Genetic; Models, Statistical; Oligonucleotide
+	Array Sequence Analysis; Pattern Recognition, Automated},
+  owner = {wtalloen},
+  pii = {1471-2105-7-3},
+  pmid = {16398926},
+  timestamp = {2008.05.21},
+  url = {http://dx.doi.org/10.1186/1471-2105-7-3}
+}
+
+@ARTICLE{Mansmann2006,
+  author = {U. Mansmann and M. Ruschhaupt and W. Huber},
+  title = {Reproducible statistical analysis in microarray profiling studies.},
+  journal = {Methods Inf Med},
+  year = {2006},
+  volume = {45},
+  pages = {139--145},
+  number = {2},
+  abstract = {OBJECTIVES: Microarrays are a recent biotechnology that offers the
+	hope of improved cancer classification. A number of publications
+	presented clinically promising results by combining this new kind
+	of biological data with specifically designed algorithmic approaches.
+	But, reproducing published results in this domain is harder than
+	it may seem. METHODS: This paper presents examples, discusses the
+	problems hidden in the published analyses and demonstrates a strategy
+	to improve the situation which is based on the vignette technology
+	available from the R and Bioconductor projects. RESULTS: The tool
+	of a compendium is discussed to achieve reproducible calculations
+	and to offer an extensible computational framework. A compendium
+	is a document that bundles primary data, processing methods (computational
+	code), derived data, and statistical output with textual documentation
+	and conclusions. It is interactive in the sense that it allows for
+	the modification of the processing options, plugging in new data,
+	or inserting further algorithms and visualizations. CONCLUSIONS:
+	Due to the complexity of the algorithms, the size of the data sets,
+	and the limitations of the medium printed paper it is usually not
+	possible to report all the minutiae of the data processing and statistical
+	computations. The technique of a compendium allows a complete critical
+	assessment of a complex analysis.},
+  doi = {10.1267/METH06020139},
+  institution = {IBE, Medical School, LMU München, Marchioninistr. 15, 81377 München,
+	Germany. mansmann@ibe.med.uni-muenchen.de},
+  keywords = {Gene Expression Profiling; Humans; Oligonucleotide Array Sequence
+	Analysis; Reproducibility of Results},
+  owner = {wtalloen},
+  pii = {06020139},
+  pmid = {16538278},
+  timestamp = {2008.05.21},
+  url = {http://dx.doi.org/10.1267/METH06020139}
+}
+
+@ARTICLE{Michiels2005,
+  author = {Stefan Michiels and Serge Koscielny and Catherine Hill},
+  title = {Prediction of cancer outcome with microarrays: a multiple random
+	validation strategy.},
+  journal = {Lancet},
+  year = {2005},
+  volume = {365},
+  pages = {488--492},
+  number = {9458},
+  abstract = {BACKGROUND: General studies of microarray gene-expression profiling
+	have been undertaken to predict cancer outcome. Knowledge of this
+	gene-expression profile or molecular signature should improve treatment
+	of patients by allowing treatment to be tailored to the severity
+	of the disease. We reanalysed data from the seven largest published
+	studies that have attempted to predict prognosis of cancer patients
+	on the basis of DNA microarray analysis. METHODS: The standard strategy
+	is to identify a molecular signature (ie, the subset of genes most
+	differentially expressed in patients with different outcomes) in
+	a training set of patients and to estimate the proportion of misclassifications
+	with this signature on an independent validation set of patients.
+	We expanded this strategy (based on unique training and validation
+	sets) by using multiple random sets, to study the stability of the
+	molecular signature and the proportion of misclassifications. FINDINGS:
+	The list of genes identified as predictors of prognosis was highly
+	unstable; molecular signatures strongly depended on the selection
+	of patients in the training sets. For all but one study, the proportion
+	misclassified decreased as the number of patients in the training
+	set increased. Because of inadequate validation, our chosen studies
+	published overoptimistic results compared with those from our own
+	analyses. Five of the seven studies did not classify patients better
+	than chance. INTERPRETATION: The prognostic value of published microarray
+	results in cancer studies should be considered with caution. We advocate
+	the use of validation by repeated random sampling.},
+  doi = {10.1016/S0140-6736(05)17866-0},
+  institution = {Biostatistics and Epidemiology Unit, Institut Gustave Roussy, Villejuif,
+	France.},
+  keywords = {Gene Expression Profiling; Humans; Neoplasms; Oligonucleotide Array
+	Sequence Analysis; Prognosis; Sample Size},
+  owner = {wtalloen},
+  pii = {S0140-6736(05)17866-0},
+  pmid = {15705458},
+  timestamp = {2008.05.21},
+  url = {http://dx.doi.org/10.1016/S0140-6736(05)17866-0}
+}
+
+@ARTICLE{Ransohoff2004,
+  author = {David F Ransohoff},
+  title = {Rules of evidence for cancer molecular-marker discovery and validation.},
+  journal = {Nat Rev Cancer},
+  year = {2004},
+  volume = {4},
+  pages = {309--314},
+  number = {4},
+  month = {Apr},
+  doi = {10.1038/nrc1322},
+  institution = {Department of Medicine, University of North Carolina at Chapel Hill,
+	27599-7080, USA. ransohof@med.unc.edu},
+  keywords = {Humans; Neoplasms; Prognosis; Reproducibility of Results; Tumor Markers,
+	Biological},
+  owner = {wtalloen},
+  pii = {nrc1322},
+  pmid = {15057290},
+  timestamp = {2008.05.21},
+  url = {http://dx.doi.org/10.1038/nrc1322}
+}
+
+@ARTICLE{Ruschhaupt2004,
+  author = {Markus Ruschhaupt and Wolfgang Huber and Annemarie Poustka and Ulrich
+	Mansmann},
+  title = {A compendium to ensure computational reproducibility in high-dimensional
+	classification tasks.},
+  journal = {Stat Appl Genet Mol Biol},
+  year = {2004},
+  volume = {3},
+  pages = {Article37},
+  abstract = {We demonstrate a concept and implementation of a compendium for the
+	classification of high-dimensional data from microarray gene expression
+	profiles. A compendium is an interactive document that bundles primary
+	data, statistical processing methods, figures, and derived data together
+	with the textual documentation and conclusions. Interactivity allows
+	the reader to modify and extend these components. We address the
+	following questions: how much does the discriminatory power of a
+	classifier depend on the choice of the algorithm that was used to
+	identify it; what alternative classifiers could be used just as well;
+	how robust is the result. The answers to these questions are essential
+	prerequisites for validation and biological interpretation of the
+	classifiers. We show how to use this approach by looking at these
+	questions for a specific breast cancer microarray data set that first
+	has been studied by Huang et al. (2003).},
+  doi = {10.2202/1544-6115.1078},
+  institution = {Division of Molecular Genome Analysis, German Cancer Research Centre.
+	m.ruschhaupt@dkfz-heidelberg.de},
+  owner = {wtalloen},
+  pmid = {16646817},
+  timestamp = {2008.05.21},
+  url = {http://dx.doi.org/10.2202/1544-6115.1078}
+}
+
+@comment{jabref-meta: selector_publisher:}
+
+@comment{jabref-meta: selector_author:}
+
+@comment{jabref-meta: selector_journal:}
+
+@comment{jabref-meta: selector_keywords:}
+

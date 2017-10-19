@@ -1,0 +1,710 @@
+\documentclass[a4paper]{article}
+\usepackage[OT1]{fontenc}
+\usepackage{float}
+\usepackage{Sweave}
+\usepackage{geometry}
+%\geometry{ hmargin=2.5cm, vmargin=2.5cm }
+
+% \VignetteIndexEntry{nlcv}
+
+\begin{document}
+
+
+<<init, echo = FALSE>>=
+
+	if(!dir.exists("./graphs"))	dir.create("./graphs")
+	
+@
+
+\title{Nested Loop Cross Validation for Classification using \texttt{nlcv}}
+\author{Willem Talloen}
+
+\maketitle
+
+\section{Introduction}
+Microarrays may provide clinicians with valuable biomarkers for disease status or treatment sensitivity.
+Extracting molecular signatures from the high-dimensional data is however a difficult and complex task.
+The aim is to select a small number of features (genes) with high predictive accuracy \cite{Diaz-Uriarte2006}.
+ \textit{Classification} algorithms in combination with \textit{feature selection} methods serve this purpose.
+
+One of the biggest problems of classification models is the \textit{low reproducibility} of their results \cite{Ruschhaupt2004},
+ primarily due to \textit{overfitting}.
+To fully consider the pitfall of overfitting, one should do more than only carefully avoiding potential selection
+ bias \cite{Ambroise2002}, as obtained results may also be specific for the used training samples or for the used
+  selection/classification methods;
+\begin{itemize}
+\item From seven large studies aimed at predicting prognosis of cancer patients by microarrays,
+ \cite{Michiels2005} found that the obtained results depended on how the patients were selected
+  in the training set. Because of problems with this aspect of study design, the outcomes of these studies were biased.
+\item Potential differences in results between classification models will cause signatures to depend highly
+ on the algorithm used to extract the signature. Therefore, the scientist has to validate how much of the reported
+  discrimination can be attributed to a real biological difference:
+  the scientist needs to \textit{disentangle biology and algorithm}\cite{Ruschhaupt2004}.
+\end{itemize}
+
+The package \texttt{nlcv} provides a framework for robust and reproducible classification while keeping a high sensitivity
+ to detect subtle signals. Its main benefits are;
+ 
+\begin{enumerate}
+\item It uses and compares multiple classification models based on the original code from the authors.
+\item It estimates predictive accuracy not once, but on multiple random partitions into training and test sets.
+\item A balanced partitioning avoids that samples of a certain class are absent in either training or test set
+ in small sample sized studies.
+\item A clear separation of feature selection and classification algorithms allows more flexibility and an
+ assessment of the relative impact of the two steps.
+\item The use of both a univariate (gene-by-gene) t-test ranking and a multivariate Random forest variable importance ranking
+ allow selecting genes either in isolation as well as in combination.
+\item There is no selection bias, as feature selection and classification are applied in combination on the training samples only.
+\end{enumerate}
+
+
+\section{Methodology}
+
+The package \texttt{nlcv} implements two nested cross-validation loops to estimate the misclassification error rate (MCR).
+ Cross-validation is an appropiate instrument to estimate the MCR \cite{Ransohoff2004}.
+First, the models for feature selection and classification are combined to create a "complete classification procedure"
+ \cite{Ruschhaupt2004}. Then the outer cross-validations are performed with this complete classification procedure.
+ 
+ The outer cross-validation loop is used to estimate the misclassification rate and the inner
+cross-validation loop is used to tune the optimal parameters for a given complete classification
+procedure \cite{Ruschhaupt2004}. The test set used for estimating the MCR is not included in the
+cross-validation loop for the tuning of the parameters (see Figure \ref{fig:NestedLoop}).
+So, as an example, applying 20 outer CV loops is random partitioning the data 20 times into training and test sets,
+and obtaining 20 MCR based on these 20 different test sets.
+The default setting of \texttt{nlcv} is to split the data into 2/3 training and 1/3 test.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics{./figures/NestedLoop.pdf}
+  \caption{Scheme of nested loop cross-validation, showing that feature selection and classification are within
+   a outer cross-validation loop and therefore do not see the test samples of
+   that outer CV loop.}
+  \label{fig:NestedLoop}
+\end{figure}
+
+Feature ranking is done once in every outer cross-validation loop. Then, based on the cut-offs for
+ \texttt{x} number of features prespecified by the user, the top \texttt{x} features are used for inner
+  cross-validation loops (see Figure \ref{fig:Ranking_NL}).
+At the moment, two feature selection techniques are implemented: t-test and random forest variable importance
+ for ranking the features on relevance in respectively isolation and combination.
+ 
+\begin{figure}[H]
+  \centering
+  \includegraphics{./figures/Ranking_NL.pdf}
+  \caption{Scheme of nested loop cross-validation, showing that feature ranking is done only
+   once in every outer cross-validation loop. Selection is done as many times as the user specified how
+    many genes should be considered.}
+  \label{fig:Ranking_NL}
+\end{figure}
+
+This package makes use of state-of-the-art classification algorithms from existing packages
+ uploaded via the wrapper package \texttt{MLInterfaces}.
+
+\pagebreak
+
+
+\section{Results}
+\subsection{Data Simulation}
+<<Setting, fig = FALSE, echo = FALSE, term = FALSE>>=
+  options(width=65)
+  set.seed(123)
+@
+
+First we load the package.
+
+<<LoadLib, fig = FALSE, echo = TRUE, term = FALSE>>=
+library(nlcv)
+@
+
+Second, we simulate 6 datasets with different properties using the function \texttt{simulateData}.
+ More specifically we generate 40 samples and 1000 features containing; 
+\begin{enumerate}
+\item Random data to check whether the obtained results are not over-optimistic. 
+<<Simulation, fig = FALSE, echo = TRUE, term = FALSE>>=
+EsetRandom <- simulateData(nCols = 40, nRows = 1000, nEffectRows = 0, nNoEffectCols = 0)
+@
+
+\item Data including 10 strongly differentially expressed genes to check whether the signal is detected.
+<<Simulation, fig = FALSE, echo = TRUE, term = FALSE>>=
+EsetStrongSignal <- simulateData(nCols = 40, nRows = 1000, nEffectRows = 10, 
+	nNoEffectCols = 0, betweenClassDifference = 3, withinClassSd = 0.5)
+@
+
+\item Data including 5 moderately differentially expressed genes to check whether a more subtle signal can also be detected.
+<<Simulation, fig = FALSE, echo = TRUE, term = FALSE>>=
+EsetWeakSignal <- simulateData(nCols = 40, nRows = 1000, nEffectRows = 5, 
+	nNoEffectCols = 0, betweenClassDifference = 1, withinClassSd = 0.6)
+@
+
+\item Data including 5 strongly differentially expressed genes, with some samples having an expression profile like
+ in the opposite class. This to check how outlying samples affect the obtained results. Data with group A having 5
+  samples behaving like group B.  
+<<Simulation, fig = FALSE, echo = TRUE, term = FALSE>>=
+EsetStrongHeteroSignal <- simulateData(nCols = 40, nRows = 1000, nEffectRows = 5, 
+	nNoEffectCols = 5, betweenClassDifference = 3, withinClassSd = 0.5)
+@
+
+\item Data including 5 moderately differentially expressed genes, with some samples having an expression profile like
+ in the opposite class. This to check how previous study behaves if the signal is weaker.  
+<<Simulation, fig = FALSE, echo = TRUE, term = FALSE>>=
+EsetWeakHeteroSignal <- simulateData(nCols = 40, nRows = 1000, nEffectRows = 5, 
+	nNoEffectCols = 5, betweenClassDifference = 1, withinClassSd = 0.6)
+@
+
+\end{enumerate}
+
+
+We generate 20 samples from class 'A' and 20 from class 'B'. The rows with simulated difference between classes A and B 
+occur in the top of the dataset, and are consequently referred to by Gene.1, Gene.2, etc. The columns that are simulated as
+belonging to the opposite class occur in the beginning, and are consequently called Sample1, Sample2 to sampleN when N samples
+ were simulated as outliers.
+
+As an illustration, the expression levels of the first gene of the data set \emph{EsetStrongHeteroSignal} are shown
+in \ref{fig:plotGeneSHS}. This is clearly a gene with a strong signal (mean difference of 3), and there are clearly three samples (samples1
+to 5) that behave as samples from group B. 
+
+<<Simulation, fig = FALSE, echo = FALSE, term = FALSE>>=
+		geneX <- 1
+		myData <- EsetStrongHeteroSignal
+		xx <- pData(myData)$type
+		yy <- exprs(myData)[geneX,]
+		myTitle <- rownames(exprs(myData))[geneX]
+	pdf(file = "./graphs/plotGeneSHS.pdf")
+		boxplot(yy~xx,col='grey',xlab='',ylab='', main = myTitle, axes=FALSE)
+		text(xx,yy,labels=colnames(exprs(myData)),col='blue',pos=4,cex=0.7)
+		axis(1, at=1:2, labels=levels(xx));axis(2, las=2)
+	dev.off()
+@
+	
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/plotGeneSHS.pdf}
+  \caption{The expression levels of the first gene of the data set EsetStrongHeteroSignal.}
+  \label{fig:plotGeneSHS}
+\end{figure}
+	
+\subsection{Classification}
+
+Let's now run the nlcv. Here we use 2 runs whith t-test selection as an illustration as the number of runs determines the 
+computation time, and as Random Forest selection is computationally more intensive.
+
+% eval = FALSE because it takes too much time
+<<nlcv, fig = FALSE, echo = TRUE, term = FALSE, eval = FALSE>>=
+	nlcvTT_SS <- nlcv(EsetStrongSignal, classVar = "type", nRuns = 2, 
+		fsMethod = "t.test", verbose = TRUE)
+@
+
+As 2 runs is insufficient to obtain accurate estimates of MRC, we use results of previously ran nclv based on 20 runs 
+The computation time of the calculations of the 8 nlcv's, all using 20 runs, was around 1h30 on a laptop.
+
+<<nlcv load_objects_20runs, fig = FALSE, echo = FALSE, term = FALSE>>=
+  # No Signal - Random data
+  data("nlcvRF_R"); data("nlcvTT_R")
+  # Strong Signal
+  data("nlcvRF_SS"); data("nlcvTT_SS")
+  # Weak Signal
+  data("nlcvRF_WS"); data("nlcvTT_WS")
+  # Strong, heterogeneous Signal
+  data("nlcvRF_SHS"); data("nlcvTT_SHS")
+  # Weak, heterogeneous Signal
+  data("nlcvRF_WHS"); data("nlcvTT_WHS")
+@
+
+<<nlcv run_objects_20runs, fig = FALSE, echo = FALSE, term = FALSE>>=
+#	# Sidenote:  nlcvRF_SS (loaded in the previous chunk) was obtained with following code
+#	nlcvRF_SS <- nlcv(EsetStrongSignal, classVar = "type", nRuns = 20, fsMethod = "randomForest", verbose = TRUE)
+#	save(nlcvRF_SS, file = "nlcvRF_SS.rda")
+#	nlcvTT_SS <- nlcv(EsetStrongSignal, classVar = "type", nRuns = 20, fsMethod = "t.test", verbose = TRUE)
+#	save(nlcvTT_SS, file = "nlcvTT_SS.rda")
+#	
+#	Similarly for any other dataset, like EsetWeakSignal, WeakHeteroSignal, StrongHeteroSignal and EsetRandom
+@
+
+\subsection{Random data without signal.}
+Let's first simulate a completely random data set. This to check whether the obtained results are
+ indeed robust against overfitting.
+
+Figure \ref{fig:mcrPlot_nlcv_R}, created with the code below, shows that all classifiers for all gene set sizes have an average MCR of 0.5.
+Feature selection on t-test even generates on average worse MCR (0.58) than expected by chance.
+
+<<mcrPlot_RandomData, fig = FALSE, echo = TRUE, term = FALSE>>=
+# plot MCR versus number of features
+pdf(file = "./graphs/mcrPlot_nlcv_R.pdf", width = 10, height = 5)
+  layout(matrix(1:4, ncol = 2), height = c(6, 1, 6, 1))
+  mcrPlot_RF_R <- mcrPlot(nlcvRF_R, plot = TRUE, optimalDots = TRUE, 
+	layout = FALSE, main = 'RF selection')
+  mcrPlot_TT_R <- mcrPlot(nlcvTT_R, plot = TRUE, optimalDots = TRUE, 
+ 	layout = FALSE, main = 'T selection')
+  layout(1)
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.1\textwidth]{./graphs/mcrPlot_nlcv_R.pdf}
+  \caption{The mean misclassification rate (mcr) and its standard error for each classification technique
+   and number of features, calculated across the runs of the nested loop cross-validation.}
+  \label{fig:mcrPlot_nlcv_R}
+\end{figure}
+
+%Table \ref{tab:mcrPlot_TT_R} shows, for each classification technique, the optimal number of features
+% as well as the associated mean MCR and standard deviation of the MCR values.
+
+%<<RandomData, fig = FALSE, echo = FALSE, results=tex>>=
+%xtable(summary(mcrPlot_TT_R), label = "tab:mcrPlot_TT_R",
+%		caption="Optimal number of features with associated mean and standard deviation of the MCR.")
+%@
+
+Figure \ref{fig:ScoresPlot_nlcv_R}, created with the code below, shows the probability scores for Random Forest
+ with Variable Importance selection with a gene set of 5 genes. 
+ There are as many samples good as bad classified, and more importantly,
+ no single sample (except sample 35) has been always correctly classified or always misclassified.
+
+<<scoresPlot_RandomData, fig = FALSE, echo = TRUE, term = FALSE>>=
+pdf(file = "./graphs/ScoresPlot_nlcv_R.pdf", width = 10, height = 6)
+scoresPlot(nlcvRF_R, "randomForest", 5)
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_R.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_R}
+\end{figure}
+
+Finally, the top 10 most frequently selected genes by RF variable importance \ref{tab:selGenes_R}
+shows that no gene is frequently selected. Only gene 410 is half of the time selected.
+
+<<selGenes, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvRF_R, n = 10)
+xtable(outtable, label = "tab:selGenes_R",
+		caption="Top 10 features across all runs of the nested loop cross-validation.")
+@
+ 
+ 
+\subsection{Data containing a strong signal.}
+
+Next, we simulate a similar random data set (40x10000), but this time we have introduced 10 genes
+that are strongly differentially expressed between the groups A and B (see Gene.1 in Figure \ref{fig:plotGeneSS} as an example).
+
+<<Simulation, fig = FALSE, echo = FALSE, term = FALSE>>=
+		geneX <- 1
+		myData <- EsetStrongSignal
+		xx <- pData(myData)$type
+		yy <- exprs(myData)[geneX,]
+		myTitle <- rownames(exprs(myData))[geneX]
+	pdf(file = "./graphs/plotGeneSS.pdf")
+	boxplot(yy~xx,col='grey',xlab='',ylab='', main = myTitle, axes=FALSE)
+	text(xx,yy,labels=colnames(exprs(myData)),col='blue',pos=4,cex=0.7)
+	axis(1, at=1:2, labels=levels(xx));axis(2, las=2)
+		dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/plotGeneSS.pdf}
+  \caption{The expression levels of the first gene of the simulated data set.}
+  \label{fig:plotGeneSS}
+\end{figure}
+
+Figure \ref{fig:mcrPlot_nlcv_SS} shows that all classifiers except bagging (MCR of 0.015) have an average MCR of 0
+for all gene set sizes.
+
+<<RandomData, fig = FALSE, echo = FALSE, term = FALSE>>=
+# plot MCR versus number of features
+pdf(file = "./graphs/mcrPlot_nlcv_SS.pdf", width = 10, height = 5)
+  layout(matrix(1:4, ncol = 2), height = c(6, 1, 6, 1))
+  mcrPlot_SSF_SS <- mcrPlot(nlcvRF_SS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'RF selection')
+  mcrPlot_TT_SS <- mcrPlot(nlcvTT_SS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'T selection')
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.1\textwidth]{./graphs/mcrPlot_nlcv_SS.pdf}
+  \caption{The mean misclassification rate (mcr) and its standard error for each classification technique
+   and number of features, calculated across the runs of the nested loop cross-validation.}
+  \label{fig:mcrPlot_nlcv_SS}
+\end{figure}
+
+Figure \ref{fig:ScoresPlot_nlcv_SS} indeed shows that all samples were classified correctly in 100% of the times
+ with Random Forest with Variable Importance selection with a gene set of 5 genes. 
+
+<<RandomData, fig = FALSE, echo = FALSE, term = FALSE>>=
+pdf(file = "./graphs/ScoresPlot_nlcv_SS.pdf", width = 10, height = 6)
+scoresPlot(nlcvRF_SS, "randomForest", 5)
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_SS.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_SS}
+\end{figure}
+
+Finally, the top 12 most frequently selected genes by RF variable importance (Table \ref{tab:selGenes_SS})
+shows that the genes with a signal were always selected. The same thing applies for t-test selection.
+
+<<selGenes, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvRF_SS, n = 12)
+xtable(outtable, label = "tab:selGenes_SS",
+		caption="Top 20 features across all runs of the nested loop cross-validation.")
+@
+ 
+ 
+\subsection{Data containing a weak signal.}
+
+In a similar simulation, we have introduced 5 genes that are only moderately differentially
+ expressed between the groups A and B (see Gene.1 in Figure \ref{fig:plotGeneWS} as an example).
+
+<<Simulation, fig = FALSE, echo = FALSE, term = FALSE>>=
+		geneX <- 1
+		myData <- EsetWeakSignal
+		xx <- pData(myData)$type
+		yy <- exprs(myData)[geneX,]
+		myTitle <- rownames(exprs(myData))[geneX]
+	pdf(file = "./graphs/plotGeneWS.pdf")
+	boxplot(yy~xx,col='grey',xlab='',ylab='', main = myTitle, axes=FALSE)
+	text(xx,yy,labels=colnames(exprs(myData)),col='blue',pos=4,cex=0.7)
+	axis(1, at=1:2, labels=levels(xx));axis(2, las=2)
+		dev.off()
+@
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/plotGeneWS.pdf}
+  \caption{The expression levels of the first gene of the simulated data set.}
+  \label{fig:plotGeneWS}
+\end{figure}
+
+Figure \ref{fig:mcrPlot_nlcv_WS} shows that more variation across the different classifiers, but also an increased
+variation across runs of the same classifier for the same gene set size.
+In general, average MCR around 0.3 are obtained. Not all gene set sizes have similar MCRs, but there is a minimum for
+gene sets containing around 5 to 10 genes. This perfectly fits the bias-variance trade-off expected due to overfitting.
+
+<<RandomData, fig = FALSE, echo = FALSE, term = FALSE>>=
+# plot MCR versus number of features
+pdf(file = "./graphs/mcrPlot_nlcv_WS.pdf", width = 10, height = 5)
+  layout(matrix(1:4, ncol = 2), height = c(6, 1, 6, 1))
+  mcrPlot_WSF_WS <- mcrPlot(nlcvRF_WS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'RF selection')
+  mcrPlot_TT_WS <- mcrPlot(nlcvTT_WS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'T selection')
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.1\textwidth]{./graphs/mcrPlot_nlcv_WS.pdf}
+  \caption{The mean misclassification rate (mcr) and its standard error for each classification technique
+   and number of features, calculated across the runs of the nested loop cross-validation.}
+  \label{fig:mcrPlot_nlcv_WS}
+\end{figure}
+
+Support Vector machines using t-test feature selction performs the best when using 7 genes. 
+Figure \ref{fig:ScoresPlot_nlcv_WS} shows that all samples except two were classified more than half of the times. 
+Note that if one would use this summarized confidence level to assess classification accuracy,
+one would even have a MCR of 0.1 (2/20).
+
+<<ScoresPlot_nlcv_WS, fig = FALSE, echo = FALSE, term = FALSE>>=
+  pdf(file = "./graphs/ScoresPlot_nlcv_WS.pdf", width = 10, height = 6)
+    scoresPlot(nlcvRF_WS, "svm", 7)
+  dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_WS.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_WS}
+\end{figure}
+
+The top 7 most frequently selected genes by t-test selection (Table \ref{tab:selGenes_WS1})
+shows that the 5 simulated genes are in the top 6. RF variable importance (Table \ref{tab:selGenes_WS2})
+is is selecting less accurately as expected because the signal was simulated gene-by-gene.
+
+<<selGenesNlcvTT_WS, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvTT_WS, n = 7)
+xtable(outtable, label = "tab:selGenes_WS1",
+		caption="Top 20 features selected with t-test across all runs of the nested loop cross-validation.")
+@
+
+<<selGenesNlcvRF_WS, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvRF_WS, n = 7)
+xtable(outtable, label = "tab:selGenes_WS2",
+		caption="Top 20 features selected with RF variable importance across all runs of the nested loop cross-validation.")
+@
+
+\subsection{Data containing a strong and heterogeneous signal.}
+
+Besides introducing 5 genes that are strongly differentially  expressed between the groups A and B,
+we also simulate 5 samples of group A to behave like group B (see Gene.1 in Figure \ref{fig:plotGeneSHS} as an example).
+
+<<Simulation, fig = FALSE, echo = FALSE, term = FALSE>>=
+		geneX <- 1
+		myData <- EsetStrongHeteroSignal
+		xx <- pData(myData)$type
+		yy <- exprs(myData)[geneX,]
+		myTitle <- rownames(exprs(myData))[geneX]
+	pdf(file = "./graphs/plotGeneSHS.pdf")
+	boxplot(yy~xx,col='grey',xlab='',ylab='', main = myTitle, axes=FALSE)
+	text(xx,yy,labels=colnames(exprs(myData)),col='blue',pos=4,cex=0.7)
+	axis(1, at=1:2, labels=levels(xx));axis(2, las=2)
+		dev.off()
+@
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/plotGeneSHS.pdf}
+  \caption{The expression levels of the first gene of the simulated data set.}
+  \label{fig:plotGeneSHS}
+\end{figure}
+
+Figure \ref{fig:mcrPlot_nlcv_SHS} shows that, despite the strong signal, the overall MCR is not zero but around 0.15-0.2.
+There is quite some variability within and between the different classifiers.
+Although not very clearly, MCRs decrease with increasing size towards sizes of 3-5 and afterwards increase,
+ as expected due to overfitting. [ ? SVM seems to be the classifier that is the most sensitive to overfitting. ]
+Irrespective of the gene set size, PAM always results in the lowest MCRs.
+
+<<mcrPlot_nlcv_SHS, fig = FALSE, echo = FALSE, term = FALSE>>=
+# plot MCR versus number of features
+pdf(file = "./graphs/mcrPlot_nlcv_SHS.pdf", width = 10, height = 5)
+  layout(matrix(1:4, ncol = 2), height = c(6, 1, 6, 1))
+  mcrPlot_SHSF_SHS <- mcrPlot(nlcvRF_SHS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'RF selection')
+  mcrPlot_TT_SHS <- mcrPlot(nlcvTT_SHS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'T selection')
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.1\textwidth]{./graphs/mcrPlot_nlcv_SHS.pdf}
+  \caption{The mean misclassification rate (mcr) and its standard error for each classification technique
+   and number of features, calculated across the runs of the nested loop cross-validation.}
+  \label{fig:mcrPlot_nlcv_SHS}
+\end{figure}
+
+Let's look at 3 different 'feature selection-classifier' combinations. Figure \ref{fig:ScoresPlot_nlcv_SHS}
+ shows that PAM with 7 genes selected with t-test classifies all samples correctly. The samples truely belonging to their group
+ are classified 100 \% correctly, while the first five samples are 100\% classified to the other group - which is also correct
+ as we have simulated these samples to behave in this way.
+ 
+<<scoresPlots, fig = FALSE, echo = FALSE, term = FALSE>>=
+pdf(file = "./graphs/ScoresPlot_nlcv_SHS.pdf", width = 10, height = 6)
+  scoresPlot(nlcvTT_SHS, "pam", 7)
+dev.off()
+pdf(file = "./graphs/ScoresPlot_nlcv_SHS2.pdf", width = 10, height = 6)
+  scoresPlot(nlcvTT_SHS, "randomForest", 7)
+dev.off()
+pdf(file = "./graphs/ScoresPlot_nlcv_SHS3.pdf", width = 10, height = 6)
+  scoresPlot(nlcvRF_SHS, "randomForest", 7)
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_SHS.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_SHS}
+\end{figure}
+
+Second, using the same 7 genes, Random Forest fails to put all samples in their true group (Figure \ref{fig:ScoresPlot_nlcv_SHS2}).
+If one selects the 7 genes using RF variable importance, Random Forest improves things, but is still not as good as
+the MCR obtained when using PAM (Figure \ref{fig:ScoresPlot_nlcv_SHS3}.
+Therefore, PAM seems to be more robust against misspecified samples.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_SHS2.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_SHS2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_SHS3.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_SHS3}
+\end{figure}
+
+
+The top 7 most frequently selected genes by t-test selection (Table \ref{tab:selGenes_SHS1})
+shows that the 5 simulated genes are in the top 6. RF variable importance (Table \ref{tab:selGenes_SHS2})
+is is selecting less accurately as expected because the signal was simulated gene-by-gene.
+
+<<selGenes, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvTT_SHS, n = 7)
+xtable(outtable, label = "tab:selGenes_SHS1",
+		caption="Top 20 features selected with t-test across all runs of the nested loop cross-validation.")
+@
+
+<<selGenes, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvRF_SHS, n = 7)
+xtable(outtable, label = "tab:selGenes_SHS2",
+		caption="Top 20 features selected with RF variable importance across all runs of the nested loop cross-validation.")
+@
+
+\subsection{Data containing a weak and heterogeneous signal.}
+
+For completeness, let's do a similar simulation as previously (5 outlying samples) but with 5 genes that
+ are only moderately differentially  expressed between the groups A and B (see Gene.1 in Figure \ref{fig:plotGeneSHS}
+  as an example).
+
+<<Simulation, fig = FALSE, echo = FALSE, term = FALSE>>=
+
+geneX <- 1:4
+myData <- EsetWeakHeteroSignal
+xx <- pData(myData)$type
+pdf(file = "./graphs/plotGeneWHS.pdf")
+par(mfrow=c(2,2))
+for (i in 1:4){
+	yy <- exprs(myData)[geneX[i],]
+	myTitle <- rownames(exprs(myData))[geneX[i]]
+boxplot(yy~xx,col='grey',xlab='',ylab='', main = myTitle, axes=FALSE)
+	text(xx,yy,labels=colnames(exprs(myData)),col='blue',pos=4,cex=0.85)
+	axis(1, at=1:2, labels=levels(xx));axis(2, las=2)
+}
+par(mfrow=c(1,1))
+		dev.off()
+@
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/plotGeneWHS.pdf}
+  \caption{The expression levels of the first gene of the simulated data set.}
+  \label{fig:plotGeneSHS}
+\end{figure}
+
+Figure \ref{fig:mcrPlot_nlcv_WHS} shows that overall MCR lie around 0.35-0.4.
+There is quite some variability within and between the different classifiers.
+Now, PAM does not always result in the overall lowest MCRs.
+
+<<RandomData, fig = FALSE, echo = FALSE, term = FALSE>>=
+# plot MCR versus number of features
+pdf(file = "./graphs/mcrPlot_nlcv_WHS.pdf", width = 10, height = 5)
+  layout(matrix(1:4, ncol = 2), height = c(6, 1, 6, 1))
+  mcrPlot_WHSF_WHS <- mcrPlot(nlcvRF_WHS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'RF selection')
+  mcrPlot_TT_WHS <- mcrPlot(nlcvTT_WHS, plot = TRUE, optimalDots = TRUE, layout = FALSE, main = 'T selection')
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.1\textwidth]{./graphs/mcrPlot_nlcv_WHS.pdf}
+  \caption{The mean misclassification rate (mcr) and its standard error for each classification technique
+   and number of features, calculated across the runs of the nested loop cross-validation.}
+  \label{fig:mcrPlot_nlcv_WHS}
+\end{figure}
+
+%Table \ref{tab:mcrPlot_TT_WHS} shows, for each classification technique, the optimal number of features
+% as well as the associated mean MCR and standard deviation of the MCR values.
+
+%<<RandomData, fig = FALSE, echo = FALSE, results=tex>>=
+%xtable(summary(mcrPlot_TT_WHS), label = "tab:mcrPlot_TT_WHS",
+%		caption="Optimal number of features with associated mean and standard deviation of the MCR.")
+%@
+
+Let's look at 3 different 'feature selection-classifier' combinations. Figure \ref{fig:ScoresPlot_nlcv_WHS}
+ shows that PAM with 2 genes (the most optimal gene set size) selected with t-test classifies most samples correctly,
+  although still 5 samples are less than 50\% of the time classified correctly.
+PAM with 10 genes results however in only 2 missclassified samples (Figure \ref{fig:ScoresPlot_nlcv_WHS0}).
+  
+<<RandomData, fig = FALSE, echo = FALSE, term = FALSE>>=
+pdf(file = "./graphs/ScoresPlot_nlcv_WHS.pdf", width = 10, height = 6)
+scoresPlot(nlcvTT_WHS, "pam", 2)
+dev.off()
+pdf(file = "./graphs/ScoresPlot_nlcv_WHS0.pdf", width = 10, height = 6)
+scoresPlot(nlcvTT_WHS, "pam", 10)
+dev.off()
+pdf(file = "./graphs/ScoresPlot_nlcv_WHS2.pdf", width = 10, height = 6)
+scoresPlot(nlcvTT_WHS, "randomForest", 15)
+dev.off()
+pdf(file = "./graphs/ScoresPlot_nlcv_WHS3.pdf", width = 10, height = 6)
+scoresPlot(nlcvRF_WHS, "randomForest", 5)
+dev.off()
+@
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_WHS.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_WHS}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_WHS0.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_WHS0}
+\end{figure}
+
+Second, using 15 genes (the optimal gene set size for RF), Random Forest does slightly worse (Figure \ref{fig:ScoresPlot_nlcv_WHS2}).
+If one selects 5 genes using RF variable importance, Random Forest improves things. Although it has 6 samples that are most
+of the times missclassified, it succeeds in predicting some samples more often correctly, i.e. more percentages around 100\%
+or around zero \% (for the 5 outlying samples) (Figure \ref{fig:ScoresPlot_nlcv_WHS3}). Therefore, RF seems to be preferred.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_WHS2.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_WHS2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{./graphs/ScoresPlot_nlcv_WHS3.pdf}
+  \caption{The proportion for each sample of being correctly classified across all runs
+   of the nested loop cross-validation.}
+  \label{fig:ScoresPlot_nlcv_WHS3}
+\end{figure}
+
+
+The most frequently selected genes by t-test selection contain only 2 of the 5 genes with an effect
+ (Table \ref{tab:selGenes_WHS1}),  while RF variable importance contain 4 out of 5 (Table \ref{tab:selGenes_WHS2}).
+This might be explained because we used here a parametric t-test which is more sensitive for outliers.
+
+<<selGenes, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvTT_WHS, n = 10)
+xtable(outtable, label = "tab:selGenes_WHS1",
+		caption="Top 20 features selected with t-test across all runs of the nested loop cross-validation.")
+@
+
+<<selGenes, fig = FALSE, echo = FALSE, results=tex>>=
+outtable <- topTable(nlcvRF_WHS, n = 10)
+xtable(outtable, label = "tab:selGenes_WHS2",
+		caption="Top 20 features selected with RF variable importance across all runs of the nested loop cross-validation.")
+@
+
+\newpage
+
+\appendix
+
+\section{Software used}
+
+<<sessionInfo, echo = FALSE, results = tex>>=
+  toLatex(sessionInfo())
+@
+
+\bibliography{vignetteNLCV}
+\bibliographystyle{plain}
+
+
+\end{document}
+
+system("pdflatex nlcv.tex")
+system("bibtex nlcv")
+system("pdflatex nlcv.tex")
+system("pdflatex nlcv.tex")
+system("pdflatex nlcv.tex")
+
