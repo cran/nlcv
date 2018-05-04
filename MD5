@@ -1,4 +1,4 @@
-e03718afa6d94d1bdd9c261d69720373 *DESCRIPTION
+6998758fdc59a110e167941ea4fd9359 *DESCRIPTION
 8b68966009873f7ef818eccd856072b1 *NAMESPACE
 380db93a4afee93f7b6885e21c4cb33b *R/classify_bioc_2.3.R
 230cb8ba90626b3fb77692eb899c0c6a *R/compareOrig.R
@@ -17,7 +17,7 @@ b87f338e759252b2b2344fb104c5b6b5 *R/scoresPlot.R
 0fafdbdb85ac93b901b5ef63aa93098c *R/xtable.confusionMatrix.R
 8ec9932da0618623ad9444507bae14b7 *R/xtable.summary.mcrPlot.R
 9a6733c192f5417f4dfdd24fdf4beac0 *R/zzz.R
-ca09f96db284dab9b2fc3a6daad91101 *build/vignette.rds
+9a475342eb4ee146852b39cc2b850845 *build/vignette.rds
 d23e04d81447d15cb04f7819ec8d236c *data/datalist
 31b8be0e5ad465d39fda0559c0d3acdf *data/nlcvRF_R.rda
 87bc51a589787cb655c4fb7be9858acf *data/nlcvRF_SHS.rda
@@ -29,10 +29,10 @@ efd78e847b39b28a203854e97509b2b9 *data/nlcvRF_WS.rda
 ea8688302592120e16c6f1cf455c9a90 *data/nlcvTT_SS.rda
 4eb00469856e6038a8c987b3e8943b36 *data/nlcvTT_WHS.rda
 88d79aa88347ea014ed344ebcfc8c0ae *data/nlcvTT_WS.rda
-12b0d2535701967439b34511a20c5b76 *inst/NEWS
+2e33acdc38a8706020a487805eaffae0 *inst/NEWS
 70110948ddb6f9ef6d50259283cc05dd *inst/doc/nlcv.R
 ae89afdfd559c1f7584fd369b8590c42 *inst/doc/nlcv.Rnw
-e870621bc51f1bcc917a328b9bad05be *inst/doc/nlcv.pdf
+f5b6095365e2b72097b194f31d44e53c *inst/doc/nlcv.pdf
 9fe41976ef097e9f510f39ce97122757 *inst/generateData.R
 dc9d54d588231b9172e1a6849db52771 *inst/unitTests/Makefile
 1a7975cc8b1513ccbefffa167404e784 *inst/unitTests/runTests.R
@@ -75,4 +75,4 @@ a9f2d7542e15e40f952f0609634e4e8a *man/xtable.summary.mcrPlot.Rd
 8348cecf2888d88ff0f73e899c27bee8 *vignettes/figures/NestedLoop.pdf
 7b132c9e8ef5cdc92bfb542995a2efad *vignettes/figures/Ranking_NL.pdf
 ae89afdfd559c1f7584fd369b8590c42 *vignettes/nlcv.Rnw
-042861e6af42bc25435f3997e4294bca *vignettes/vignetteNLCV.bib
+5b0ba4ce1299f00c486c8766f6964393 *vignettes/vignetteNLCV.bib
