@@ -1,4 +1,4 @@
-6998758fdc59a110e167941ea4fd9359 *DESCRIPTION
+3493a82295d5111d639b82495d7fd82d *DESCRIPTION
 8b68966009873f7ef818eccd856072b1 *NAMESPACE
 380db93a4afee93f7b6885e21c4cb33b *R/classify_bioc_2.3.R
 230cb8ba90626b3fb77692eb899c0c6a *R/compareOrig.R
@@ -29,10 +29,10 @@ efd78e847b39b28a203854e97509b2b9 *data/nlcvRF_WS.rda
 ea8688302592120e16c6f1cf455c9a90 *data/nlcvTT_SS.rda
 4eb00469856e6038a8c987b3e8943b36 *data/nlcvTT_WHS.rda
 88d79aa88347ea014ed344ebcfc8c0ae *data/nlcvTT_WS.rda
-2e33acdc38a8706020a487805eaffae0 *inst/NEWS
+696228147a8cf867388d6ee896e801dd *inst/NEWS
 70110948ddb6f9ef6d50259283cc05dd *inst/doc/nlcv.R
 ae89afdfd559c1f7584fd369b8590c42 *inst/doc/nlcv.Rnw
-f5b6095365e2b72097b194f31d44e53c *inst/doc/nlcv.pdf
+948eb43b678d7e76e0e5be68b92a0df1 *inst/doc/nlcv.pdf
 9fe41976ef097e9f510f39ce97122757 *inst/generateData.R
 dc9d54d588231b9172e1a6849db52771 *inst/unitTests/Makefile
 1a7975cc8b1513ccbefffa167404e784 *inst/unitTests/runTests.R
