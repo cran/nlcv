@@ -1,4 +1,4 @@
-3493a82295d5111d639b82495d7fd82d *DESCRIPTION
+0348effc434fa9966dbe4ca19440e2ea *DESCRIPTION
 8b68966009873f7ef818eccd856072b1 *NAMESPACE
 380db93a4afee93f7b6885e21c4cb33b *R/classify_bioc_2.3.R
 230cb8ba90626b3fb77692eb899c0c6a *R/compareOrig.R
@@ -7,7 +7,7 @@ cd0285370443179be97d75eb8e670c87 *R/confusionMatrix.R
 deda7cc2e97c8044bca97b5535c41f7d *R/inTrainingSample.R
 ee87c24e34bf0fb038e275540c521e30 *R/limma.R
 119a9fe706d8421889ed9c0040425bfd *R/mcrPlot.R
-204ac9d9114bdd473a4b2f586c83005f *R/nlcv.R
+4f9702e430ca88fced6b09636c1674e7 *R/nlcv.R
 91c9bd231ddd27028572a45879389d20 *R/nldaI.R
 6935c10a382d28541a693b868b1dff6b *R/pamrI.R
 793de8e7ade81c621ed5970fc50fb4c9 *R/rankDistributionPlot.R
@@ -17,7 +17,7 @@ b87f338e759252b2b2344fb104c5b6b5 *R/scoresPlot.R
 0fafdbdb85ac93b901b5ef63aa93098c *R/xtable.confusionMatrix.R
 8ec9932da0618623ad9444507bae14b7 *R/xtable.summary.mcrPlot.R
 9a6733c192f5417f4dfdd24fdf4beac0 *R/zzz.R
-9a475342eb4ee146852b39cc2b850845 *build/vignette.rds
+ca09f96db284dab9b2fc3a6daad91101 *build/vignette.rds
 d23e04d81447d15cb04f7819ec8d236c *data/datalist
 31b8be0e5ad465d39fda0559c0d3acdf *data/nlcvRF_R.rda
 87bc51a589787cb655c4fb7be9858acf *data/nlcvRF_SHS.rda
@@ -29,10 +29,10 @@ efd78e847b39b28a203854e97509b2b9 *data/nlcvRF_WS.rda
 ea8688302592120e16c6f1cf455c9a90 *data/nlcvTT_SS.rda
 4eb00469856e6038a8c987b3e8943b36 *data/nlcvTT_WHS.rda
 88d79aa88347ea014ed344ebcfc8c0ae *data/nlcvTT_WS.rda
-696228147a8cf867388d6ee896e801dd *inst/NEWS
+c3ce31219326baed13c2392c0fbc37b7 *inst/NEWS
 70110948ddb6f9ef6d50259283cc05dd *inst/doc/nlcv.R
 ae89afdfd559c1f7584fd369b8590c42 *inst/doc/nlcv.Rnw
-948eb43b678d7e76e0e5be68b92a0df1 *inst/doc/nlcv.pdf
+00dbbbf99a223ff1e8bd56e8797ee7b7 *inst/doc/nlcv.pdf
 9fe41976ef097e9f510f39ce97122757 *inst/generateData.R
 dc9d54d588231b9172e1a6849db52771 *inst/unitTests/Makefile
 1a7975cc8b1513ccbefffa167404e784 *inst/unitTests/runTests.R
@@ -42,7 +42,7 @@ e4daeb431fe0509cbd09d23e05c5049c *man/confusionMatrix.nlcv.Rd
 176585463eb21d4f0a50f26ab6ad3948 *man/inTrainingSample.Rd
 347afd7a184f560cf6612db5fba23a52 *man/limmaTwoGroups.Rd
 a025234d1035d8d4b70731bbdb218422 *man/mcrPlot.Rd
-122669295aaaa5cecf99ed762a32e96e *man/nlcv.Rd
+486bd1654d3df43a7b19b93d661e8d29 *man/nlcv.Rd
 3e0fd92bc8346297fc84a2a62e3b833b *man/nlcvRF_R.Rd
 9cff3cbd1558fe01ffe4903bc582ab8c *man/nlcvRF_SHS.Rd
 595a5ea9491a5457b07ab760ea23d478 *man/nlcvRF_SS.Rd

@@ -1,3 +1,6 @@
+0.3.5
+    o nlcv: add seed parameter, return testScores in case method not glm or nlda
+    o nlcv: use only training samples for feature selection with random forest
 0.3.4
     o add RUnit and ALL in Suggests
 0.3.3

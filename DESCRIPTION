@@ -1,8 +1,8 @@
 Package: nlcv
 Type: Package
 Title: Nested Loop Cross Validation
-Version: 0.3.4
-Date: 2018-05-18
+Version: 0.3.5
+Date: 2018-06-29
 Author: Willem Talloen, Tobias Verbeke                                                                                                             
 Maintainer: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
 Description: Nested loop cross validation for classification purposes for misclassification error rate estimation.
@@ -23,6 +23,6 @@ Suggests: RUnit, ALL
 License: GPL-3
 RoxygenNote: 6.0.1.9000
 NeedsCompilation: no
-Packaged: 2018-05-18 11:41:03 UTC; lcougnaud
+Packaged: 2018-06-29 21:29:20 UTC; lcougnaud
 Repository: CRAN
-Date/Publication: 2018-05-18 12:01:52 UTC
+Date/Publication: 2018-06-29 21:49:59 UTC

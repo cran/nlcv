@@ -37,6 +37,7 @@
 #' object? Defaults to \code{FALSE}
 #' @param verbose Should the output be verbose (\code{TRUE}) or not
 #' (\code{FALSE}).
+#' @param seed integer with seed, set at the start of the cross-validation.
 #' @return The result is an object of class 'nlcv'. It is a list with two
 #' components, \code{output} and \code{features}.
 #' 
@@ -62,18 +63,21 @@
 #' @importFrom MLInterfaces testPredictions
 #' @export
 nlcv <- function(eset,
-		classVar = "type",
-		nRuns = 2,          # total number of runs i.e. number of splits in training and test set
-		propTraining = 2/3, # proportion of data in a training set                     
-		classdist = c("balanced", "unbalanced"), 
-		nFeatures = c(2, 3, 5, 7, 10, 15, 20, 25, 30, 35), #, 40),
-		fsMethod = c("randomForest", "t.test", "limma", "none"),
-		classifMethods = c("dlda", "randomForest", "bagg", "pam", "svm"),
-		fsPar = NULL,
-		initialGenes = seq(length.out = nrow(eset)),
-		geneID = "ID",
-		storeTestScores = FALSE,
-		verbose = FALSE){
+	classVar = "type",
+	nRuns = 2,          # total number of runs i.e. number of splits in training and test set
+	propTraining = 2/3, # proportion of data in a training set                     
+	classdist = c("balanced", "unbalanced"), 
+	nFeatures = c(2, 3, 5, 7, 10, 15, 20, 25, 30, 35), #, 40),
+	fsMethod = c("randomForest", "t.test", "limma", "none"),
+	classifMethods = c("dlda", "randomForest", "bagg", "pam", "svm"),
+	fsPar = NULL,
+	initialGenes = seq(length.out = nrow(eset)),
+	geneID = "ID",
+	storeTestScores = FALSE,
+	verbose = FALSE,
+	seed = 123){
+
+	set.seed(seed)
 	
 	fsMethod <- match.arg(fsMethod)
 	if (!(fsMethod %in% c("randomForest", "t.test", "limma", "none")))
@@ -196,8 +200,12 @@ nlcv <- function(eset,
 					ntree <- if (is.null(fsPar$ntree)) 500
 							else fsPar$ntree
 					
-		          rf <- randomForest(x = t(exprs(eset[initialGenes, ])),
-		              y = pData(eset)[,classVar], 
+				 dataRF <- t(exprs(eset[initialGenes, trainingSampleRun]))
+				 varRF <- pData(eset)[trainingSampleRun, classVar]
+					
+		          rf <- randomForest(
+					  x = dataRF,
+		              y = varRF, 
 		              mtry= mtry,
 		              importance=TRUE)
 		          
@@ -237,7 +245,7 @@ nlcv <- function(eset,
 					
 					limmaTopTable <- limmaTwoGroups(eset[, trainingSampleRun],
 							group = classVar) 
-					          limmaTopTableGeneIDs <- as.character(limmaTopTable[, "ROWNAMES"])
+					limmaTopTableGeneIDs <- as.character(limmaTopTable[, "ROWNAMES"])
 #          if (geneID == "ENTREZID"){
 #            # limmaTopTableGeneIDs <- limmaTopTableGeneIDs[!is.na(limmaTopTableGeneIDs)]
 #            limmaTopTableGeneIDs <- paste(limmaTopTableGeneIDs, "_at", sep = "")
@@ -276,16 +284,25 @@ nlcv <- function(eset,
 				# predicted values
 				iPredic <- paste(iMethod, "predic", sep = ".")
 				if (!(iPredic %in% c("glm.predic", "nlda.predic"))){
+					
 					output[[iMethod]][[iNumber]][["labelsMat"]][irun,!indicesTrainingSample[irun, ]] <-
 							as.character(testPredictions(results[[iPredic]]))
+					
+					# test scores 
+					if (storeTestScores){
+						output[[iMethod]][[iNumber]][["testScoresMat"]][irun, !indicesTrainingSample[irun, ]] <-
+								apply(testScores(results[[iPredic]]), 1, max)
+					}
+					
 				} else {
+					
 					output[[iMethod]][[iNumber]][["labelsMat"]][irun,!indicesTrainingSample[irun, ]] <-
 							classVarLevels[as.numeric(testPredictions(results[[iPredic]]))]
 					
 					# test scores  
 					if (storeTestScores){
 						output[[iMethod]][[iNumber]][["testScoresMat"]][irun,!indicesTrainingSample[irun, ]] <-
-								testScores(results[[iPredic]])
+								apply(testScores(results[[iPredic]]), 1, max)
 					}
 					
 					# AUC

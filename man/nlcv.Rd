@@ -9,7 +9,7 @@ nlcv(eset, classVar = "type", nRuns = 2, propTraining = 2/3,
   20, 25, 30, 35), fsMethod = c("randomForest", "t.test", "limma", "none"),
   classifMethods = c("dlda", "randomForest", "bagg", "pam", "svm"),
   fsPar = NULL, initialGenes = seq(length.out = nrow(eset)),
-  geneID = "ID", storeTestScores = FALSE, verbose = FALSE)
+  geneID = "ID", storeTestScores = FALSE, verbose = FALSE, seed = 123)
 }
 \arguments{
 \item{eset}{ExpressionSet object containing the genes to classify}
@@ -58,6 +58,8 @@ object? Defaults to \code{FALSE}}
 
 \item{verbose}{Should the output be verbose (\code{TRUE}) or not
 (\code{FALSE}).}
+
+\item{seed}{integer with seed, set at the start of the cross-validation.}
 }
 \value{
 The result is an object of class 'nlcv'. It is a list with two
