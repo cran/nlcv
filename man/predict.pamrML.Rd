@@ -11,7 +11,7 @@
 
 \item{newdata}{new data}
 
-\item{...}{additional parameters for the \link{pamr.predict} function}
+\item{...}{additional parameters for the \link[pamr]{pamr.predict} function}
 }
 \value{
 output of the \code{pamr.predict} function

@@ -4,9 +4,11 @@
 \name{nlcvTT_SHS}
 \alias{nlcvTT_SHS}
 \title{nlcv results on strong hetero signal data with t-test feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvTT_SHS
+data(nlcvTT_SHS)
 }
 \description{
 This data set contains the \link{nlcv} results of 

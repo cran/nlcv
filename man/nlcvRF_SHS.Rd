@@ -4,9 +4,11 @@
 \name{nlcvRF_SHS}
 \alias{nlcvRF_SHS}
 \title{nlcv results on strong hetero signal data with random forest feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvRF_SHS
+data(nlcvRF_SHS)
 }
 \description{
 This data set contains the \link{nlcv} results of 

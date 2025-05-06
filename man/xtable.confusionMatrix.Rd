@@ -4,8 +4,15 @@
 \alias{xtable.confusionMatrix}
 \title{xtable method for confusionMatrix objects}
 \usage{
-\method{xtable}{confusionMatrix}(x, caption = NULL, label = NULL,
-  align = NULL, digits = NULL, display = NULL, ...)
+\method{xtable}{confusionMatrix}(
+  x,
+  caption = NULL,
+  label = NULL,
+  align = NULL,
+  digits = NULL,
+  display = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class 'confusionMatrix' as produced by the
@@ -30,7 +37,7 @@ LaTeX table representing the confusion matrix
 xtable method for confusionMatrix objects
 }
 \seealso{
-\code{\link{confusionMatrix}}, \code{\link[xtable]{xtable}}
+\code{\link[a4Core]{confusionMatrix}}, \code{\link[xtable]{xtable}}
 }
 \author{
 Willem Talloen and Tobias Verbeke

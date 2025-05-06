@@ -15,8 +15,7 @@
 #' for assessing differential expression in microarray experiments.
 #' \emph{Statistical Applications in Genetics and Molecular Biology}, Vol. 3,
 #' No. 1, Article 3.
-#' 
-#' \url{http://www.bepress.com/sagmb/vol3/iss1/art3}
+#' \doi{doi:10.2202/1544-6115.1027}
 #' @importFrom stats model.matrix
 #' @importFrom limma lmFit eBayes topTable
 #' @keywords models regression

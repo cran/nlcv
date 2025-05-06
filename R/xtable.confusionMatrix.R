@@ -9,7 +9,7 @@
 #' @param \dots additional arguments to be passed to \code{xtable}
 #' @return LaTeX table representing the confusion matrix
 #' @author Willem Talloen and Tobias Verbeke
-#' @seealso \code{\link{confusionMatrix}}, \code{\link[xtable]{xtable}}
+#' @seealso \code{\link[a4Core]{confusionMatrix}}, \code{\link[xtable]{xtable}}
 #' @keywords manip
 #' @importFrom xtable xtable
 #' @S3method xtable confusionMatrix

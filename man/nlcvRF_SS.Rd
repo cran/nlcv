@@ -4,9 +4,11 @@
 \name{nlcvRF_SS}
 \alias{nlcvRF_SS}
 \title{nlcv results on strong signal data a with random forest feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvRF_SS
+data(nlcvRF_SS)
 }
 \description{
 This data set contains the \link{nlcv} results of 

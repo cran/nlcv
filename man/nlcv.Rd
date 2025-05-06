@@ -4,12 +4,22 @@
 \alias{nlcv}
 \title{Nested Loop Cross-Validation}
 \usage{
-nlcv(eset, classVar = "type", nRuns = 2, propTraining = 2/3,
-  classdist = c("balanced", "unbalanced"), nFeatures = c(2, 3, 5, 7, 10, 15,
-  20, 25, 30, 35), fsMethod = c("randomForest", "t.test", "limma", "none"),
+nlcv(
+  eset,
+  classVar = "type",
+  nRuns = 2,
+  propTraining = 2/3,
+  classdist = c("balanced", "unbalanced"),
+  nFeatures = c(2, 3, 5, 7, 10, 15, 20, 25, 30, 35),
+  fsMethod = c("randomForest", "t.test", "limma", "none"),
   classifMethods = c("dlda", "randomForest", "bagg", "pam", "svm"),
-  fsPar = NULL, initialGenes = seq(length.out = nrow(eset)),
-  geneID = "ID", storeTestScores = FALSE, verbose = FALSE, seed = 123)
+  fsPar = NULL,
+  initialGenes = seq(length.out = nrow(eset)),
+  geneID = "ID",
+  storeTestScores = FALSE,
+  verbose = FALSE,
+  seed = 123
+)
 }
 \arguments{
 \item{eset}{ExpressionSet object containing the genes to classify}

@@ -4,9 +4,11 @@
 \name{nlcvRF_WS}
 \alias{nlcvRF_WS}
 \title{nlcv results on weak hetero signal data with random forest feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvRF_WS
+data(nlcvRF_WS)
 }
 \description{
 This data set contains the \link{nlcv} results of 

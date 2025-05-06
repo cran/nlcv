@@ -1,10 +1,13 @@
 Package: nlcv
 Type: Package
 Title: Nested Loop Cross Validation
-Version: 0.3.5
-Date: 2018-06-29
-Author: Willem Talloen, Tobias Verbeke                                                                                                             
-Maintainer: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
+Version: 0.3.6
+Date: 2025-05-06
+Authors@R: c(
+  person(given = "Willem", family = "Talloen", role = "aut"),
+  person(given = "Tobias", family = "Verbeke", role = "aut"),
+  person(given = "Laure", family = "Cougnaud", role = "cre", 
+  email = "laure.cougnaud@openanalytics.eu"))
 Description: Nested loop cross validation for classification purposes for misclassification error rate estimation.
   The package supports several methodologies for feature selection: random forest, Student t-test, limma, 
   and provides an interface to the following classification methods in the 'MLInterfaces' package: linear, 
@@ -21,8 +24,12 @@ Imports: limma, MASS, methods, graphics, Biobase, multtest,
         RColorBrewer, pamr, randomForest, ROCR, ipred, e1071, kernlab
 Suggests: RUnit, ALL
 License: GPL-3
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2018-06-29 21:29:20 UTC; lcougnaud
+Packaged: 2025-05-06 20:24:23 UTC; lcougnaud
+Author: Willem Talloen [aut],
+  Tobias Verbeke [aut],
+  Laure Cougnaud [cre]
+Maintainer: Laure Cougnaud <laure.cougnaud@openanalytics.eu>
 Repository: CRAN
-Date/Publication: 2018-06-29 21:49:59 UTC
+Date/Publication: 2025-05-06 21:00:02 UTC

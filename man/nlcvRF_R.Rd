@@ -4,9 +4,11 @@
 \name{nlcvRF_R}
 \alias{nlcvRF_R}
 \title{nlcv results on random data with random forest feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvRF_R
+data(nlcvRF_R)
 }
 \description{
 This data set contains the \link{nlcv} results of 

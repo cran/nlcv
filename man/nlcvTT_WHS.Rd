@@ -4,9 +4,11 @@
 \name{nlcvTT_WHS}
 \alias{nlcvTT_WHS}
 \title{nlcv results on weak signal data with t-test feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvTT_WHS
+data(nlcvTT_WHS)
 }
 \description{
 This data set contains the \link{nlcv} results of 

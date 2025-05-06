@@ -31,12 +31,12 @@
 #' The function invisibly returns an object of class \code{mcrPlot} which is a
 #' list with components:
 #' \itemize{
-#'  \item{meanMcrMatrix}{matrix with for each number of
+#'  \item meanMcrMatrix: matrix with for each number of
 #' features (rows) and classification technique (columns) the mean of the MCR
-#' values across all runs of the nlcv procedure.}
-#' \item{sdMcrMatrix}{matrix
+#' values across all runs of the nlcv procedure.
+#' \item sdMcrMatrix: matrix
 #' with for each number of features (rows) and classification technique
-#' (columns) the sd of the MCR values across all runs of the nlcv procedure.}
+#' (columns) the sd of the MCR values across all runs of the nlcv procedure.
 #' }
 #' The \code{summary} method for the \code{mcrPlot} object returns a matrix
 #' with for each classification technique, the optimal number of features as

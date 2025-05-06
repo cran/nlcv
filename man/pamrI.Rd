@@ -4,7 +4,9 @@
 \name{pamrI}
 \alias{pamrI}
 \title{Instance of a learnerSchema for pamr models}
-\format{An object of class \code{learnerSchema} of length 1.}
+\format{
+An object of class \code{learnerSchema} of length 1.
+}
 \usage{
 pamrI
 }

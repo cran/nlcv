@@ -3,7 +3,7 @@
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with random forest on a randomly generated dataset.
 #' @docType data
-#' @usage nlcvRF_R
+#' @usage data(nlcvRF_R)
 #' @format \code{nlcv} object
 NULL
 
@@ -12,7 +12,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with random forest on a dataset with strong hetero signal.
 #' @docType data
-#' @usage nlcvRF_SHS
+#' @usage data(nlcvRF_SHS)
 #' @format \code{nlcv} object
 NULL
 
@@ -21,7 +21,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with random forest on a dataset with strong signal.
 #' @docType data
-#' @usage nlcvRF_SS
+#' @usage data(nlcvRF_SS)
 #' @format \code{nlcv} object
 NULL
 
@@ -30,7 +30,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with random forest on a weak signal dataset.
 #' @docType data
-#' @usage nlcvRF_WHS
+#' @usage data(nlcvRF_WHS)
 #' @format \code{nlcv} object
 NULL
 
@@ -39,7 +39,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with random forest on a weak hetero signal dataset.
 #' @docType data
-#' @usage nlcvRF_WS
+#' @usage data(nlcvRF_WS)
 #' @format \code{nlcv} object
 NULL
 
@@ -48,7 +48,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with t-test on a randomly generated dataset.
 #' @docType data
-#' @usage nlcvTT_R
+#' @usage data(nlcvTT_R)
 #' @format \code{nlcv} object
 NULL
 
@@ -57,7 +57,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with t-test on a dataset with strong hetero signal.
 #' @docType data
-#' @usage nlcvTT_SHS
+#' @usage data(nlcvTT_SHS)
 #' @format \code{nlcv} object
 NULL
 
@@ -66,7 +66,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with t-test on a dataset with strong signal.
 #' @docType data
-#' @usage nlcvTT_SS
+#' @usage data(nlcvTT_SS)
 #' @format \code{nlcv} object
 NULL
 
@@ -75,7 +75,7 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with t-test on a weak signal dataset.
 #' @docType data
-#' @usage nlcvTT_WHS
+#' @usage data(nlcvTT_WHS)
 #' @format \code{nlcv} object
 NULL
 
@@ -84,6 +84,6 @@ NULL
 #' @description This data set contains the \link{nlcv} results of 
 #' selection of features with t-test on a weak hetero signal dataset.
 #' @docType data
-#' @usage nlcvTT_WS
+#' @usage data(nlcvTT_WS)
 #' @format \code{nlcv} object
 NULL

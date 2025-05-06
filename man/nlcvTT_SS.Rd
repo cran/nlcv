@@ -4,9 +4,11 @@
 \name{nlcvTT_SS}
 \alias{nlcvTT_SS}
 \title{nlcv results on strong signal data a with t-test feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvTT_SS
+data(nlcvTT_SS)
 }
 \description{
 This data set contains the \link{nlcv} results of 

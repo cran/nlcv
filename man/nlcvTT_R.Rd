@@ -4,9 +4,11 @@
 \name{nlcvTT_R}
 \alias{nlcvTT_R}
 \title{nlcv results on random data with t-test feature selection}
-\format{\code{nlcv} object}
+\format{
+\code{nlcv} object
+}
 \usage{
-nlcvTT_R
+data(nlcvTT_R)
 }
 \description{
 This data set contains the \link{nlcv} results of 

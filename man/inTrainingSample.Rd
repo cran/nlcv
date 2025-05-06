@@ -4,8 +4,11 @@
 \alias{inTrainingSample}
 \title{Function to define a learning sample based on balanced sampling}
 \usage{
-inTrainingSample(y, propTraining = 2/3, classdist = c("balanced",
-  "unbalanced"))
+inTrainingSample(
+  y,
+  propTraining = 2/3,
+  classdist = c("balanced", "unbalanced")
+)
 }
 \arguments{
 \item{y}{factor with the class labels for the total data set}

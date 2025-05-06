@@ -4,7 +4,9 @@
 \name{nldaI}
 \alias{nldaI}
 \title{new MLInterfaces schema for lda from MASS}
-\format{An object of class \code{learnerSchema} of length 1.}
+\format{
+An object of class \code{learnerSchema} of length 1.
+}
 \usage{
 nldaI
 }

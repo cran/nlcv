@@ -89,7 +89,7 @@ pamrML <- function(formula, data, ...){
   
   # TV: quick and (especially) dirty
   responseName <- as.character(formula[[2]])
-  if (class(data) == "ExpressionSet"){
+  if (inherits(x = data, what = "ExpressionSet")){
     data <- as.data.frame(t(exprs(data)))
     data <- cbind(data, pData(data)[[responseName]])
   }
@@ -105,7 +105,7 @@ pamrML <- function(formula, data, ...){
 #' predict \code{pamrML} object
 #' @param object \code{pamrML} object
 #' @param newdata new data
-#' @param ... additional parameters for the \link{pamr.predict} function
+#' @param ... additional parameters for the \link[pamr]{pamr.predict} function
 #' @return output of the \code{pamr.predict} function
 #' @importFrom stats predict
 #' @importFrom pamr pamr.predict
@@ -113,7 +113,7 @@ pamrML <- function(formula, data, ...){
 #' @export
 predict.pamrML <- function(object, newdata, ...){
   
-  if (class(newdata) == "ExpressionSet"){
+  if (inherits(x = newdata, what = "ExpressionSet")){
     newx <- exprs(newdata)
   } else { # data frame
     # remove response if present (for an easy MLIConverter)

@@ -4,8 +4,15 @@
 \alias{xtable.summary.mcrPlot}
 \title{xtable method for summary.mcrPlot objects}
 \usage{
-\method{xtable}{summary.mcrPlot}(x, caption = NULL, label = NULL,
-  align = NULL, digits = NULL, display = NULL, ...)
+\method{xtable}{summary.mcrPlot}(
+  x,
+  caption = NULL,
+  label = NULL,
+  align = NULL,
+  digits = NULL,
+  display = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class 'summary.mcrPlot' as produced by the

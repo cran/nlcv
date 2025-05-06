@@ -1,3 +1,11 @@
+0.3.6
+    o DESCRIPTION file: use Authors@R
+    o doc: 
+       - remove description-like items
+       - add link missing packages
+       - limmaTwoGroups: update link article to DOI
+       - data: add data() in usage
+    o class -> inherits
 0.3.5
     o nlcv: add seed parameter, return testScores in case method not glm or nlda
     o nlcv: use only training samples for feature selection with random forest

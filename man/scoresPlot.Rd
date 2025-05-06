@@ -4,8 +4,17 @@
 \alias{scoresPlot}
 \title{Function to Plot a Scores Plot}
 \usage{
-scoresPlot(nlcvObj, tech, nfeat, plot = TRUE, barPlot = FALSE,
-  layout = TRUE, main = NULL, sub = NULL, ...)
+scoresPlot(
+  nlcvObj,
+  tech,
+  nfeat,
+  plot = TRUE,
+  barPlot = FALSE,
+  layout = TRUE,
+  main = NULL,
+  sub = NULL,
+  ...
+)
 }
 \arguments{
 \item{nlcvObj}{Object of class 'nlcv' as produced by the \code{nlcv}
